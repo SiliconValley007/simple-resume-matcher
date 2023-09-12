@@ -7,11 +7,8 @@ nltk.download('punkt')
 nltk.download('stopwords')
 
 #loading models
-try:
-    clf = pickle.load(open('clf.pkl','rb'))
-    tfidfd = pickle.load(open('tfidf.pkl','rb'))
-except:
-    print('Files not found')
+clf = pickle.load(open('clf.pkl','rb'))
+tf_vectorizer = pickle.load(open('tfidf.pkl','rb'))
 
 def clean_resume(resume_text):
     clean_text = re.sub('http\S+\s*', ' ', resume_text)
@@ -36,7 +33,7 @@ def main():
             resume_text = resume_bytes.decode('latin-1')
 
         cleaned_resume = clean_resume(resume_text)
-        input_features = tfidfd.transform([cleaned_resume])
+        input_features = tf_vectorizer.transform([cleaned_resume])
         prediction_id = clf.predict(input_features)[0]
         st.write(prediction_id)
 
